@@ -1,0 +1,317 @@
+﻿@model ContactoModel
+@{
+    ViewData["Title"] = "Guardar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var Compañia = ViewData["Contacto"];
+}
+
+<form asp-action="ModificarContacto" asp-controller="Mantenedor" method="post">
+      <input type="hidden" value=@Compañia id="idCompañia" />
+    <div class="card ">
+        <div class="card-header">
+            <h1 class="card-title text-dark" id="tituloCompañia"></h1>
+            
+           <div class="mt-5"></div>
+            <hr/>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Información General</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class='container'>
+                <div class="row">
+
+                    <div class="col col-md-2 col-lg-2 d-flex justify-content-end">
+                        <label>Contacto </label>
+                    </div>
+
+                     <div class="col col-md-5">
+                         <input type ="text" id="txtContacto" asp-for="NombreCompañia"  class="form-control"/>
+                         <span asp-validation-for="NombreCompañia" class="text-danger" ></span>
+                     </div>
+
+                     <div class='col col-md-2 d-flex justify-content-end'>
+                        <label>Rfc</label>
+                    </div>
+
+                    <div class='col col-md-3 col-lg-3'>
+                        <input type="text" id="txtRfc" asp-for="RFC" class='form-control' name="rfc"/>
+                    </div>
+
+                </div>
+
+                    <div class="row mt-3">
+
+                        <div class="col col-md-2 d-flex justify-content-end">
+                        <label>Dirección</label>    
+                        </div>
+
+                    <div class='col col-md-5'>
+                        <input type="text" id="txtNombreCalle" asp-for="NombreCalle" placeholder='Nombre de la calle...' class='form-control'  />
+                    </div>
+
+                  
+                  
+                    <div class='col col-md-2 d-flex justify-content-end'>
+                        <label>Registro de la compañia</label>
+                    </div>
+                    <div class='col col-md-3'>
+                        <input type="text" class='form-control' asp-for="RegistroCompañia" id="txtRegistroCompañia" name="registrocompañia"/>
+                    </div>
+                  
+                </div>
+                
+
+                <div class='row mt-3' >
+
+                    <div class='col offset-md-2 col-md-5'>
+
+                        <div class='row'>
+                            <div class='col-md-3'>
+                                <label >No. Exterior</label>
+                            </div>
+                            <div class='col-md-3'>
+                                <input type="text" class='form-control' asp-for="NoExterior" id="txtNoExterior" name="noexterior" />
+                            </div>
+                            <div class='col-md-3'>
+                                <label >No. de puerta</label>
+                            </div>
+                            <div class='col-md-3'>
+                                <input type="text" class='form-control' asp-for="NoPuerta" id="txtNoPuerta" name="nopuerta" />
+                            </div>
+                        </div>
+                    </div>                                                                                                      
+                </div>
+
+
+                <div class='row mt-3' >
+                <div class='col offset-md-2 col-md-5'>
+                        <input type="text" id="txtCalle2" class="form-control" asp-for="Colonia" placeholder='Calle 2..'  />
+                    </div>
+
+
+                    <div class='col col-md-2 d-flex justify-content-end'>
+                        <label>Moneda</label>
+                    </div>
+
+                    <div class='col col-md-3'>
+
+                        <select id="SelectedMoneda" class='form-control' asp-for="Moneda"  >
+                            <option value="none" selected disabled hidden>Seleccione Opcion</option>
+                            <option value="1">MXN</option>
+                            <option value="2" >USD</option>
+                        </select>
+
+                            <span asp-validation-for="Moneda" class="text-danger" ></span>
+                    </div>
+
+
+                </div>
+
+
+                <div class='row mt-3'>
+
+                    <div class='col offset-md-2 col-md-5'>
+                        <div class='row'>
+                            <div class='col col-md-4'>
+                                <input type="text" id="txtCiudad" asp-for="Ciudad" placeholder='Ciudad' class='form-control' />
+                            </div>
+
+                            <div class='col col-md-4'>
+                                <select id="SelectProvincia" asp-for="Provincia" class='form-control' ></select>
+
+                            </div>
+                            <div class='col col-md-4'>
+                                <input type="text" id="txtCP" asp-for="CP" placeholder='C.P' class='form-control'  />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class='row mt-3'>
+
+                    <div class='col offset-md-2 col-md-5'>
+
+                        <select id="selectPais" class='form-control' asp-for="IdPais" ></select>
+                    </div>
+                
+                    </div>
+
+
+                <div class='row mt-3'>
+
+                <div class='col col-md-2 d-flex justify-content-end'>
+                    <label>Teléfono</label>
+                </div>
+                <div class='col col-md-5'>
+                    <input type="text" id="txtTelefono" asp-for="Telefono" class='form-control' name="telefono" />
+                </div>
+
+                </div>
+
+       
+
+
+    <div class='row mt-3'>
+        <div class='col col-md-2 d-flex justify-content-end'>
+            <label>Correo electrónico</label>
+        </div>
+        <div class='col col-md-5'>
+        <input type="text" id="txtCorreo" asp-for="CorreoElectronico" class='form-control' />
+    </div>
+      </div>
+
+    <div class='row mt-3'>
+        <div class='col col-md-2 d-flex justify-content-end'>
+            <label>Sitio Web</label>
+        </div>
+        <div class='col col-md-5'>
+            <input type="text" id="txtSitioWeb" placeholder='e.j https://www.odoo.com' asp-for="SitioWeb"  class='form-control' />
+        </div>
+    </div>
+
+    <div class='row mt-3'>
+        <div class="col offset-md-9 col-sm-3 d-flex ">
+        <button type="submit" class= "btn btn-success" >Modificar</button>&nbsp;
+        <a href="#" class="btn btn-outline-success" id="btnDescartar">Descartar</a>
+        </div>
+    </div>
+
+
+    </div>
+    </div></div>
+
+  
+
+</form>
+
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        let ObjDatosOriginales;
+
+$(document).ready(function () {
+
+
+    ObtenerProvincia();
+    ObtenerPaises();
+    LlenarFormulario();
+
+
+
+    $("#btnDescartar").on("click", function () {
+
+        LlenaFormularioOriginal();
+    
+    });
+
+    });
+
+       const ObtenerProvincia = () => {
+                  $.ajax({
+        
+        url: "@Url.Action("ObtenerProvincia","Mantenedor")",
+        dataType: "json",
+        success: function(data) {
+          
+                $.each(data, function (index, elem) {
+           $("#SelectProvincia").append('<option value=' + elem.id + '>' + elem.descripcion + '</option>');
+
+
+            });
+           $("#SelectProvincia").append('<option value="0" selected disabled hidden>Seleccione Opcion</option>');
+           $("#SelectProvincia").val(0);
+        }
+    })
+
+    }
+
+    const ObtenerPaises =() => {
+        
+    $.ajax({
+        
+        url: "@Url.Action("ObtenerPaises","Mantenedor")",
+        dataType: "json",
+        success: function(data) {
+          
+                $.each(data, function (index, elem) {
+           $("#selectPais").append('<option value=' + elem.id + '>' + elem.descripcion + '</option>');
+
+
+            });
+
+                  $("#selectPais").append('<option value="0" selected disabled hidden>Seleccione Opcion</option>');
+                  $("#selectPais").val(0);
+        }
+       
+    })
+    }
+                
+
+    const LlenarFormulario =() => {
+                      
+                   var idcompañia = $("#idCompañia").val();
+
+                    $.post('/Mantenedor/ObtenerSoloLectura', {IdContacto : idcompañia}, function(data){
+
+                     ObjDatosOriginales = data;
+                     $("#tituloCompañia").text(data.nombreCompañia)
+                     $("#txtContacto").val(data.nombreCompañia);
+                     $("#txtRegistroCompañia").val(data.registroCompañia);
+                     $("#txtNombreCalle").val(data.nombreCalle);
+                     $("#txtNoExterior").val(data.noExterior);
+                     $("#txtNoPuerta").val(data.noPuerta);
+                     $("#txtCalle2").val(data.noPuerta);
+                     $("#SelectedMoneda").val(data.moneda);
+                     $("#txtCiudad").val(data.ciudad);
+                     $("#SelectProvincia").val(data.provincia);
+                     $("#txtCP").val(data.cp);
+                     $("#selectPais").val(data.idPais);
+                     $("#txtTelefono").val(data.telefono);
+                     $("#txtCorreo").val(data.correoElectronico);
+                     $("#txtSitioWeb").val(data.sitioWeb);
+                     $("#txtRfc").val(data.rfc);
+
+
+    });
+    }
+
+    const LlenaFormularioOriginal =() =>  {
+
+
+                     $("#txtContacto").val(ObjDatosOriginales.nombreCompañia);
+                     $("#txtRegistroCompañia").val(ObjDatosOriginales.registroCompañia);
+                     $("#txtNombreCalle").val(ObjDatosOriginales.nombreCalle);
+                     $("#txtNoExterior").val(ObjDatosOriginales.noExterior);
+                     $("#txtNoPuerta").val(ObjDatosOriginales.noPuerta);
+                     $("#txtCalle2").val(ObjDatosOriginales.noPuerta);
+                     $("#SelectedMoneda").val(ObjDatosOriginales.moneda);
+                     $("#txtCiudad").val(ObjDatosOriginales.ciudad);
+                     $("#SelectProvincia").val(ObjDatosOriginales.provincia);
+                     $("#txtCP").val(ObjDatosOriginales.cp);
+                     $("#selectPais").val(ObjDatosOriginales.idPais);
+                     $("#txtTelefono").val(ObjDatosOriginales.telefono);
+                     $("#txtCorreo").val(ObjDatosOriginales.correoElectronico);
+                     $("#txtSitioWeb").val(ObjDatosOriginales.sitioWeb);
+                     $("#txtRfc").val(ObjDatosOriginales.rfc);
+    }
+
+
+
+ 
+
+</script>
+
+}
+
+ 

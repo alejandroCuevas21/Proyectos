@@ -1,0 +1,158 @@
+﻿@model ContactoModel
+@{
+    ViewData["Title"] = "Listar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var Compañia = ViewData["Contacto"];
+}
+<form asp-action="RedirijeModificar" asp-controller="Mantenedor" method="post">
+
+
+    <input type="hidden" asp-for="IdContacto" value=@Compañia id="idCompañia"  />
+    <div class="card ">
+        <div class="card-header">
+            <h1 class="card-title text-dark" id="tituloCompañia"></h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Información General</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-sm-2 d-flex justify-content-end">
+                    <label><b>Contacto</b></label>
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="text-primary" id="lblNombreCompañia"></label>
+                </div>
+
+                <div class="col-sm-2 d-flex justify-content-end">
+                    <label><b>RFC</b></label>
+                </div>
+
+                <div class="col-sm-3">
+                    <label id="lblRFC"></label>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-sm-2 d-flex justify-content-end">
+                        <label><b>Dirección</b></label>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label id="lblDireccion"></label>
+                    </div>
+
+                    <div class="col-sm-2 d-flex justify-content-end">
+                        <label><b>Registro del compañia</b></label>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label id="lblRegistroCompañia"></label>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <div class="col offset-sm-2 col-sm-3">
+                        <label id="lblColonia"></label>
+                    </div>
+
+                    <div class="col-sm-2 d-flex justify-content-end">
+                        <label><b>Moneda</b></label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label id="lblMoneda"></label>
+                    </div>
+                </div>
+
+
+
+                <div class="row mt-3">
+                    <div class="col offset-sm-2 col-sm-3">
+                        <label id="lblDireccion2"></label>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <div class="col offset-sm-2 col-sm-3">
+                        <label id="lblPais"></label>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col col-sm-2 d-flex justify-content-end">
+                        <label><b>Teléfono</b></label>
+                    </div>
+
+                    <div class="col col-sm-3">
+                        <label id="lblCorreo"></label>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col col-sm-2 d-flex justify-content-end">
+                        <label><b>Sitio Web</b></label>
+                    </div>
+                    <div class=col col-sm-3">
+                        <label class="text-primary" id="lblSitioWeb"></label>
+
+                    </div>
+                </div>
+
+
+          <div class='row mt-3'>
+        <div class="col offset-md-9 col-sm-3 d-flex ">
+        <a id="btnCrear" class="btn btn-success">CREAR</a>&nbsp;
+          <button type="submit" id="btnEditar" action="Editar" class="btn btn-outline-success">EDITAR</button>
+        </div>
+    </div>
+                
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+
+<script type="text/javascript">
+
+                 $(document).ready(function () {
+                    ObtenerSoloLectura();
+                    });
+
+
+               const ObtenerSoloLectura = () => {
+                   var idcompañia = $("#idCompañia").val()
+
+                    $.post('/Mantenedor/ObtenerSoloLectura', {IdContacto : idcompañia}, function(data){
+
+                      $("#tituloCompañia").text(data.nombreCompañia);
+                      $("#lblNombreCompañia").text(data.nombreCompañia)
+                      $("#lblRFC").text(data.rfc)
+                      $("#lblDireccion").text(data.nombreCalle + ' ' + data.noExterior  + ' ' + data.noPuerta  )
+                      $("#lblRegistroCompañia").text(data.registroCompañia)
+                      $("#lblColonia").text(data.colonia)
+                      $("#lblMoneda").text(data.descMoneda)
+                      $("#lblDireccion2").text(data.ciudad + ' ' + data.descPais + ' ' + data.cp )
+                      $("#lblPais").text( data.descPais)
+                      $("#lblCorreo").text(data.correoElectronico)
+                      $("#lblSitioWeb").text(data.sitioWeb)
+
+                     });
+
+                }
+
+
+
+
+</script>
+      }
