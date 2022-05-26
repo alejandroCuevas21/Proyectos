@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NsWb0JLgkjg3j2X3PTockBC2dOrkyk6CuPY5wVZwdAc9te6DonXPSx4bgwbD7fd8Fyfudd5h9FErQN12+EwJSA==",
+  "dgSpecHash": "puL97D4pC07xW7TNqMk8B2YizaCJp8wNQfnYBIKW17izz9HNdxHHr2KK9CqPUYcpwKSIQdO0b7YYA1cAVCFd4w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\alexc\\source\\repos\\AplicacionEmpresas2\\AplicacionEmpresas2\\AplicacionEmpresas2.csproj",
+  "projectFilePath": "C:\\Users\\alexc\\OneDrive\\Escritorio\\Proyecto\\AplicacionEmpresas2\\AplicacionEmpresas2\\AplicacionEmpleados.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alexc\\.nuget\\packages\\humanizer.core\\2.2.0\\humanizer.core.2.2.0.nupkg.sha512",
     "C:\\Users\\alexc\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",

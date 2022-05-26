@@ -3,7 +3,7 @@
     public class CatalogosModel
     {
 
-        public int Id { get; set; }
+        public int Estatus_Id { get; set; }
         public string Descripcion { get; set; }
     }
 }

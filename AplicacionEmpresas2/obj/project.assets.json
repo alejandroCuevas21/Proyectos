@@ -9060,11 +9060,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alexc\\source\\repos\\AplicacionEmpresas2\\AplicacionEmpresas2\\AplicacionEmpresas2.csproj",
-      "projectName": "AplicacionEmpresas2",
-      "projectPath": "C:\\Users\\alexc\\source\\repos\\AplicacionEmpresas2\\AplicacionEmpresas2\\AplicacionEmpresas2.csproj",
+      "projectUniqueName": "C:\\Users\\alexc\\OneDrive\\Escritorio\\Proyecto\\AplicacionEmpresas2\\AplicacionEmpresas2\\AplicacionEmpleados.csproj",
+      "projectName": "AplicacionEmpleados",
+      "projectPath": "C:\\Users\\alexc\\OneDrive\\Escritorio\\Proyecto\\AplicacionEmpresas2\\AplicacionEmpresas2\\AplicacionEmpleados.csproj",
       "packagesPath": "C:\\Users\\alexc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alexc\\source\\repos\\AplicacionEmpresas2\\AplicacionEmpresas2\\obj\\",
+      "outputPath": "C:\\Users\\alexc\\OneDrive\\Escritorio\\Proyecto\\AplicacionEmpresas2\\AplicacionEmpresas2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alexc\\AppData\\Roaming\\NuGet\\NuGet.Config",

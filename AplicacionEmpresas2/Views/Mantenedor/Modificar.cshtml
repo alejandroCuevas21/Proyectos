@@ -1,13 +1,15 @@
 ﻿@model ContactoModel
 @{
     ViewData["Title"] = "Guardar";
+    ViewData["SubTitle"] = "COMPAÑIAS/NUEVO";
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
     var Compañia = ViewData["Contacto"];
 }
 
-<form asp-action="ModificarContacto" asp-controller="Mantenedor" method="post">
+@*<form asp-action="ModificarContacto" asp-controller="Mantenedor" method="post">
       <input type="hidden" value=@Compañia id="idCompañia" />
     <div class="card ">
         <div class="card-header">
@@ -190,7 +192,7 @@
 
   
 
-</form>
+</form>*@
 
 
 

@@ -7,7 +7,7 @@ namespace AplicacionEmpresas2.Controllers
 {
     public class MantenedorController : Controller
     {
-        ContactoDatos _contactoDatos = new ContactoDatos();
+        EmpleadosDatos _contactoDatos = new EmpleadosDatos();
         public IActionResult Listar(int respuesta)
         {
 
@@ -43,22 +43,15 @@ namespace AplicacionEmpresas2.Controllers
         }
 
         [HttpPost]
-        public IActionResult Guardar(ContactoModel oContacto)
+        public IActionResult Guardar(EmpleadoModel oContacto)
         {
-           
-             
+
+
             if (ModelState.IsValid)
             {
                 var respuesta = _contactoDatos.Guardar(oContacto);
 
-                if (respuesta != 0)
-                {
-                    return RedirectToAction("Listar", new { respuesta });
-                }
-                else
-                {
-                    return View();
-                }
+                return View();        
             }
             else
             {
@@ -67,43 +60,40 @@ namespace AplicacionEmpresas2.Controllers
         }
 
 
-      
 
-        [HttpPost]
-        public IActionResult ModificarContacto(ContactoModel oContacto)
+        public IActionResult GuardarEmpleado(EmpleadoModel Empleado)
         {
-
-            var respuesta = _contactoDatos.Modificar(oContacto);
-            return RedirectToAction("Guardar");
-
-        }
-
-
-        [HttpPost]
-
-        public ContactoModel ObtenerSoloLectura(int IdContacto)
-        {
-
-            return _contactoDatos.Listar(IdContacto);
+            EmpleadoModel RespuestaGuarda;
+            if (Empleado.Empleado_Id == 0) { 
             
+              RespuestaGuarda = _contactoDatos.Guardar(Empleado);
+            }
+            else
+            {
+               RespuestaGuarda = _contactoDatos.ActualizaEmpleado(Empleado);
+            }
+            return new JsonResult(RespuestaGuarda);
+
         }
-
-
-        public IActionResult ObtenerPaises()
+        public IActionResult ObtenerEstatus()
         {
-            var catalogoPais = _contactoDatos.ObtenerPaises();
+            var CatalogoEstatus = _contactoDatos.ObtenerEstatus();
 
-            return new JsonResult(catalogoPais);
+            return new JsonResult(CatalogoEstatus);
 
         }
 
-        public IActionResult ObtenerProvincia()
+
+       public IActionResult ConsultarEmpleados()
         {
-            var CatalogoProvincia = _contactoDatos.ObtenerProvincia();
 
-            return new JsonResult(CatalogoProvincia);
+            var ListaEmpleados = _contactoDatos.ObtenerEmpleados();
+
+            return new JsonResult(ListaEmpleados);
 
         }
+
+   
 
     }
 }
