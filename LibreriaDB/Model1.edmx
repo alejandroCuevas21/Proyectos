@@ -1,0 +1,741 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BdEscolarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alumnos">
+          <Key>
+            <PropertyRef Name="Matricula" />
+          </Key>
+          <Property Name="Matricula" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ApePaterno" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ApeMaterno" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="150" />
+          <Property Name="Estatus" Type="int" />
+        </EntityType>
+        <EntityType Name="AlumnosHorario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdHorario" Type="int" Nullable="false" />
+          <Property Name="MatriculaAlumno" Type="int" Nullable="false" />
+          <Property Name="Estatus" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'BdEscolar.dbo.Calificaciones' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Calificaciones">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdMateria" />
+            <PropertyRef Name="MatriculaAlumno" />
+            <PropertyRef Name="Calificacion" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMateria" Type="int" Nullable="false" />
+          <Property Name="MatriculaAlumno" Type="int" Nullable="false" />
+          <Property Name="Calificacion" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GruposAlumnos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdHorario" Type="int" Nullable="false" />
+          <Property Name="MatriculaAlumno" Type="int" Nullable="false" />
+          <Property Name="Estatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Horario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMateria" Type="int" Nullable="false" />
+          <Property Name="IdProfesor" Type="int" Nullable="false" />
+          <Property Name="HoraInicio" Type="time" Precision="7" Nullable="false" />
+          <Property Name="HoraFin" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Estatus" Type="int" />
+        </EntityType>
+        <EntityType Name="HorarioGeneral">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Hora" Type="varchar" MaxLength="20" />
+          <Property Name="Estatus" Type="int" />
+        </EntityType>
+        <EntityType Name="Maestros">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ApePaterno" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ApeMaterno" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="150" />
+          <Property Name="Estatus" Type="int" />
+        </EntityType>
+        <EntityType Name="Materias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IdMaestro" Type="int" />
+          <Property Name="LimiteAlumno" Type="int" />
+          <Property Name="Estatus" Type="int" />
+        </EntityType>
+        <Association Name="FK_Calificaciones_Alumnos">
+          <End Role="Alumnos" Type="Self.Alumnos" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumnos">
+              <PropertyRef Name="Matricula" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="MatriculaAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Calificaciones_Materias">
+          <End Role="Materias" Type="Self.Materias" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materias">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GruposAlumnos_Alumnos">
+          <End Role="Alumnos" Type="Self.Alumnos" Multiplicity="1" />
+          <End Role="GruposAlumnos" Type="Self.GruposAlumnos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumnos">
+              <PropertyRef Name="Matricula" />
+            </Principal>
+            <Dependent Role="GruposAlumnos">
+              <PropertyRef Name="MatriculaAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GruposAlumnos_Horario">
+          <End Role="Horario" Type="Self.Horario" Multiplicity="1" />
+          <End Role="GruposAlumnos" Type="Self.GruposAlumnos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Horario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GruposAlumnos">
+              <PropertyRef Name="IdHorario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Horario_Materia">
+          <End Role="Materias" Type="Self.Materias" Multiplicity="1" />
+          <End Role="Horario" Type="Self.Horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materias">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Horario">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materias_Maestro">
+          <End Role="Maestros" Type="Self.Maestros" Multiplicity="0..1" />
+          <End Role="Materias" Type="Self.Materias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maestros">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Materias">
+              <PropertyRef Name="IdMaestro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ActualizarAlumnos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Matricula" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApePaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApeMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Estatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ActualizarMaestros" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApePaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApeMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Estatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AsignarMaestroMateria" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="IdMaestro" Type="int" Mode="In" />
+        </Function>
+        <Function Name="BuscaCalificacionesAlumno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Matricula" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertarAlumnos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApePaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApeMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Estatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertarCalificaciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+          <Parameter Name="MatriculaAlumno" Type="int" Mode="In" />
+          <Parameter Name="Calificacion" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="InsertarHorarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+          <Parameter Name="IdProfesor" Type="int" Mode="In" />
+          <Parameter Name="HoraInicio" Type="time" Mode="In" />
+          <Parameter Name="HoraFin" Type="time" Mode="In" />
+          <Parameter Name="Estatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertarMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApePaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApeMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Estatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertarMaterias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdMaestro" Type="varchar" Mode="In" />
+          <Parameter Name="LimiteAlumno" Type="varchar" Mode="In" />
+          <Parameter Name="Estatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ObtenerAlumnos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ObtenerMaestros" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ObtenerMaterias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="BdEscolarModelStoreContainer">
+          <EntitySet Name="Alumnos" EntityType="Self.Alumnos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlumnosHorario" EntityType="Self.AlumnosHorario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GruposAlumnos" EntityType="Self.GruposAlumnos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Horario" EntityType="Self.Horario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HorarioGeneral" EntityType="Self.HorarioGeneral" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Maestros" EntityType="Self.Maestros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materias" EntityType="Self.Materias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificaciones" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Calificaciones].[Id] AS [Id], 
+    [Calificaciones].[IdMateria] AS [IdMateria], 
+    [Calificaciones].[MatriculaAlumno] AS [MatriculaAlumno], 
+    [Calificaciones].[Calificacion] AS [Calificacion]
+    FROM [dbo].[Calificaciones] AS [Calificaciones]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Calificaciones_Alumnos" Association="Self.FK_Calificaciones_Alumnos">
+            <End Role="Alumnos" EntitySet="Alumnos" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Calificaciones_Materias" Association="Self.FK_Calificaciones_Materias">
+            <End Role="Materias" EntitySet="Materias" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GruposAlumnos_Alumnos" Association="Self.FK_GruposAlumnos_Alumnos">
+            <End Role="Alumnos" EntitySet="Alumnos" />
+            <End Role="GruposAlumnos" EntitySet="GruposAlumnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GruposAlumnos_Horario" Association="Self.FK_GruposAlumnos_Horario">
+            <End Role="Horario" EntitySet="Horario" />
+            <End Role="GruposAlumnos" EntitySet="GruposAlumnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Horario_Materia" Association="Self.FK_Horario_Materia">
+            <End Role="Materias" EntitySet="Materias" />
+            <End Role="Horario" EntitySet="Horario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materias_Maestro" Association="Self.FK_Materias_Maestro">
+            <End Role="Maestros" EntitySet="Maestros" />
+            <End Role="Materias" EntitySet="Materias" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BdEscolarModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Alumnos">
+          <Key>
+            <PropertyRef Name="Matricula" />
+          </Key>
+          <Property Name="Matricula" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApePaterno" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApeMaterno" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Estatus" Type="Int32" />
+          <NavigationProperty Name="Calificaciones" Relationship="Self.FK_Calificaciones_Alumnos" FromRole="Alumnos" ToRole="Calificaciones" />
+          <NavigationProperty Name="GruposAlumnos" Relationship="Self.FK_GruposAlumnos_Alumnos" FromRole="Alumnos" ToRole="GruposAlumnos" />
+        </EntityType>
+        <EntityType Name="AlumnosHorario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdHorario" Type="Int32" Nullable="false" />
+          <Property Name="MatriculaAlumno" Type="Int32" Nullable="false" />
+          <Property Name="Estatus" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GruposAlumnos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdHorario" Type="Int32" Nullable="false" />
+          <Property Name="MatriculaAlumno" Type="Int32" Nullable="false" />
+          <Property Name="Estatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Alumnos" Relationship="Self.FK_GruposAlumnos_Alumnos" FromRole="GruposAlumnos" ToRole="Alumnos" />
+          <NavigationProperty Name="Horario" Relationship="Self.FK_GruposAlumnos_Horario" FromRole="GruposAlumnos" ToRole="Horario" />
+        </EntityType>
+        <EntityType Name="Horario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMateria" Type="Int32" Nullable="false" />
+          <Property Name="IdProfesor" Type="Int32" Nullable="false" />
+          <Property Name="HoraInicio" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="HoraFin" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Estatus" Type="Int32" />
+          <NavigationProperty Name="GruposAlumnos" Relationship="Self.FK_GruposAlumnos_Horario" FromRole="Horario" ToRole="GruposAlumnos" />
+          <NavigationProperty Name="Materias" Relationship="Self.FK_Horario_Materia" FromRole="Horario" ToRole="Materias" />
+        </EntityType>
+        <EntityType Name="HorarioGeneral">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Hora" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Estatus" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Maestros">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApePaterno" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApeMaterno" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Estatus" Type="Int32" />
+          <NavigationProperty Name="Materias" Relationship="Self.FK_Materias_Maestro" FromRole="Maestros" ToRole="Materias" />
+        </EntityType>
+        <EntityType Name="Materias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdMaestro" Type="Int32" />
+          <Property Name="LimiteAlumno" Type="Int32" />
+          <Property Name="Estatus" Type="Int32" />
+          <NavigationProperty Name="Horario" Relationship="Self.FK_Horario_Materia" FromRole="Materias" ToRole="Horario" />
+          <NavigationProperty Name="Maestros" Relationship="Self.FK_Materias_Maestro" FromRole="Materias" ToRole="Maestros" />
+          <NavigationProperty Name="Calificaciones" Relationship="Self.FK_Calificaciones_Materias" FromRole="Materias" ToRole="Calificaciones" />
+        </EntityType>
+        <EntityType Name="Calificaciones">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdMateria" />
+            <PropertyRef Name="MatriculaAlumno" />
+            <PropertyRef Name="Calificacion" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMateria" Type="Int32" Nullable="false" />
+          <Property Name="MatriculaAlumno" Type="Int32" Nullable="false" />
+          <Property Name="Calificacion" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Alumnos" Relationship="Self.FK_Calificaciones_Alumnos" FromRole="Calificaciones" ToRole="Alumnos" />
+          <NavigationProperty Name="Materias" Relationship="Self.FK_Calificaciones_Materias" FromRole="Calificaciones" ToRole="Materias" />
+        </EntityType>
+        <Association Name="FK_Calificaciones_Alumnos">
+          <End Role="Alumnos" Type="Self.Alumnos" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumnos">
+              <PropertyRef Name="Matricula" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="MatriculaAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GruposAlumnos_Alumnos">
+          <End Role="Alumnos" Type="Self.Alumnos" Multiplicity="1" />
+          <End Role="GruposAlumnos" Type="Self.GruposAlumnos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumnos">
+              <PropertyRef Name="Matricula" />
+            </Principal>
+            <Dependent Role="GruposAlumnos">
+              <PropertyRef Name="MatriculaAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GruposAlumnos_Horario">
+          <End Role="Horario" Type="Self.Horario" Multiplicity="1" />
+          <End Role="GruposAlumnos" Type="Self.GruposAlumnos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Horario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GruposAlumnos">
+              <PropertyRef Name="IdHorario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Horario_Materia">
+          <End Role="Materias" Type="Self.Materias" Multiplicity="1" />
+          <End Role="Horario" Type="Self.Horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materias">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Horario">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materias_Maestro">
+          <End Role="Maestros" Type="Self.Maestros" Multiplicity="0..1" />
+          <End Role="Materias" Type="Self.Materias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maestros">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Materias">
+              <PropertyRef Name="IdMaestro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Calificaciones_Materias">
+          <End Role="Materias" Type="Self.Materias" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materias">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BdEscolarEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alumnos" EntityType="Self.Alumnos" />
+          <EntitySet Name="AlumnosHorario" EntityType="Self.AlumnosHorario" />
+          <EntitySet Name="GruposAlumnos" EntityType="Self.GruposAlumnos" />
+          <EntitySet Name="Horario" EntityType="Self.Horario" />
+          <EntitySet Name="HorarioGeneral" EntityType="Self.HorarioGeneral" />
+          <EntitySet Name="Maestros" EntityType="Self.Maestros" />
+          <EntitySet Name="Materias" EntityType="Self.Materias" />
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificaciones" />
+          <AssociationSet Name="FK_Calificaciones_Alumnos" Association="Self.FK_Calificaciones_Alumnos">
+            <End Role="Alumnos" EntitySet="Alumnos" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GruposAlumnos_Alumnos" Association="Self.FK_GruposAlumnos_Alumnos">
+            <End Role="Alumnos" EntitySet="Alumnos" />
+            <End Role="GruposAlumnos" EntitySet="GruposAlumnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GruposAlumnos_Horario" Association="Self.FK_GruposAlumnos_Horario">
+            <End Role="Horario" EntitySet="Horario" />
+            <End Role="GruposAlumnos" EntitySet="GruposAlumnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Horario_Materia" Association="Self.FK_Horario_Materia">
+            <End Role="Materias" EntitySet="Materias" />
+            <End Role="Horario" EntitySet="Horario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materias_Maestro" Association="Self.FK_Materias_Maestro">
+            <End Role="Maestros" EntitySet="Maestros" />
+            <End Role="Materias" EntitySet="Materias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Calificaciones_Materias" Association="Self.FK_Calificaciones_Materias">
+            <End Role="Materias" EntitySet="Materias" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <FunctionImport Name="ActualizarAlumnos">
+            <Parameter Name="Matricula" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApePaterno" Mode="In" Type="String" />
+            <Parameter Name="ApeMaterno" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Estatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ActualizarMaestros">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApePaterno" Mode="In" Type="String" />
+            <Parameter Name="ApeMaterno" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Estatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AsignarMaestroMateria">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="IdMaestro" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BuscaCalificacionesAlumno" ReturnType="Collection(BdEscolarModel.BuscaCalificacionesAlumno_Result)">
+            <Parameter Name="Matricula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarAlumnos">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApePaterno" Mode="In" Type="String" />
+            <Parameter Name="ApeMaterno" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Estatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarCalificaciones">
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+            <Parameter Name="MatriculaAlumno" Mode="In" Type="Int32" />
+            <Parameter Name="Calificacion" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarHorarios">
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+            <Parameter Name="IdProfesor" Mode="In" Type="Int32" />
+            <Parameter Name="HoraInicio" Mode="In" Type="Time" />
+            <Parameter Name="HoraFin" Mode="In" Type="Time" />
+            <Parameter Name="Estatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarMaestro">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApePaterno" Mode="In" Type="String" />
+            <Parameter Name="ApeMaterno" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Estatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarMaterias">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdMaestro" Mode="In" Type="String" />
+            <Parameter Name="LimiteAlumno" Mode="In" Type="String" />
+            <Parameter Name="Estatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ObtenerAlumnos" ReturnType="Collection(BdEscolarModel.ObtenerAlumnos_Result)" />
+          <FunctionImport Name="ObtenerMaestros" ReturnType="Collection(BdEscolarModel.ObtenerMaestros_Result)" />
+          <FunctionImport Name="ObtenerMaterias" ReturnType="Collection(BdEscolarModel.ObtenerMaterias_Result)" />
+        </EntityContainer>
+        <ComplexType Name="BuscaCalificacionesAlumno_Result">
+          <Property Type="Int32" Name="Matricula" Nullable="false" />
+          <Property Type="String" Name="NomAlumno" Nullable="false" MaxLength="302" />
+          <Property Type="String" Name="NomMateria" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="Calificacion" Nullable="false" Precision="5" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="ObtenerAlumnos_Result">
+          <Property Type="Int32" Name="Matricula" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ApePaterno" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ApeMaterno" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="Estatus" Nullable="true" />
+          <Property Type="String" Name="DescEstatus" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="ObtenerMaestros_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ApePaterno" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ApeMaterno" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="Estatus" Nullable="true" />
+          <Property Type="String" Name="DescEstatus" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="ObtenerMaterias_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="LimiteAlumno" Nullable="true" />
+          <Property Type="Int32" Name="IdMaestro" Nullable="true" />
+          <Property Type="String" Name="NomMaestro" Nullable="false" MaxLength="302" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BdEscolarModelStoreContainer" CdmEntityContainer="BdEscolarEntities">
+          <EntitySetMapping Name="Alumnos">
+            <EntityTypeMapping TypeName="BdEscolarModel.Alumnos">
+              <MappingFragment StoreEntitySet="Alumnos">
+                <ScalarProperty Name="Matricula" ColumnName="Matricula" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApePaterno" ColumnName="ApePaterno" />
+                <ScalarProperty Name="ApeMaterno" ColumnName="ApeMaterno" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlumnosHorario">
+            <EntityTypeMapping TypeName="BdEscolarModel.AlumnosHorario">
+              <MappingFragment StoreEntitySet="AlumnosHorario">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdHorario" ColumnName="IdHorario" />
+                <ScalarProperty Name="MatriculaAlumno" ColumnName="MatriculaAlumno" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GruposAlumnos">
+            <EntityTypeMapping TypeName="BdEscolarModel.GruposAlumnos">
+              <MappingFragment StoreEntitySet="GruposAlumnos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdHorario" ColumnName="IdHorario" />
+                <ScalarProperty Name="MatriculaAlumno" ColumnName="MatriculaAlumno" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Horario">
+            <EntityTypeMapping TypeName="BdEscolarModel.Horario">
+              <MappingFragment StoreEntitySet="Horario">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="IdProfesor" ColumnName="IdProfesor" />
+                <ScalarProperty Name="HoraInicio" ColumnName="HoraInicio" />
+                <ScalarProperty Name="HoraFin" ColumnName="HoraFin" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HorarioGeneral">
+            <EntityTypeMapping TypeName="BdEscolarModel.HorarioGeneral">
+              <MappingFragment StoreEntitySet="HorarioGeneral">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Maestros">
+            <EntityTypeMapping TypeName="BdEscolarModel.Maestros">
+              <MappingFragment StoreEntitySet="Maestros">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApePaterno" ColumnName="ApePaterno" />
+                <ScalarProperty Name="ApeMaterno" ColumnName="ApeMaterno" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materias">
+            <EntityTypeMapping TypeName="BdEscolarModel.Materias">
+              <MappingFragment StoreEntitySet="Materias">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdMaestro" ColumnName="IdMaestro" />
+                <ScalarProperty Name="LimiteAlumno" ColumnName="LimiteAlumno" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Calificaciones">
+            <EntityTypeMapping TypeName="BdEscolarModel.Calificaciones">
+              <MappingFragment StoreEntitySet="Calificaciones">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="MatriculaAlumno" ColumnName="MatriculaAlumno" />
+                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ActualizarAlumnos" FunctionName="BdEscolarModel.Store.ActualizarAlumnos" />
+          <FunctionImportMapping FunctionImportName="ActualizarMaestros" FunctionName="BdEscolarModel.Store.ActualizarMaestros" />
+          <FunctionImportMapping FunctionImportName="AsignarMaestroMateria" FunctionName="BdEscolarModel.Store.AsignarMaestroMateria" />
+          <FunctionImportMapping FunctionImportName="BuscaCalificacionesAlumno" FunctionName="BdEscolarModel.Store.BuscaCalificacionesAlumno">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BdEscolarModel.BuscaCalificacionesAlumno_Result">
+                <ScalarProperty Name="Matricula" ColumnName="Matricula" />
+                <ScalarProperty Name="NomAlumno" ColumnName="NomAlumno" />
+                <ScalarProperty Name="NomMateria" ColumnName="NomMateria" />
+                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertarAlumnos" FunctionName="BdEscolarModel.Store.InsertarAlumnos" />
+          <FunctionImportMapping FunctionImportName="InsertarCalificaciones" FunctionName="BdEscolarModel.Store.InsertarCalificaciones" />
+          <FunctionImportMapping FunctionImportName="InsertarHorarios" FunctionName="BdEscolarModel.Store.InsertarHorarios" />
+          <FunctionImportMapping FunctionImportName="InsertarMaestro" FunctionName="BdEscolarModel.Store.InsertarMaestro" />
+          <FunctionImportMapping FunctionImportName="InsertarMaterias" FunctionName="BdEscolarModel.Store.InsertarMaterias" />
+          <FunctionImportMapping FunctionImportName="ObtenerAlumnos" FunctionName="BdEscolarModel.Store.ObtenerAlumnos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BdEscolarModel.ObtenerAlumnos_Result">
+                <ScalarProperty Name="Matricula" ColumnName="Matricula" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApePaterno" ColumnName="ApePaterno" />
+                <ScalarProperty Name="ApeMaterno" ColumnName="ApeMaterno" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="DescEstatus" ColumnName="DescEstatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ObtenerMaestros" FunctionName="BdEscolarModel.Store.ObtenerMaestros">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BdEscolarModel.ObtenerMaestros_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApePaterno" ColumnName="ApePaterno" />
+                <ScalarProperty Name="ApeMaterno" ColumnName="ApeMaterno" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="DescEstatus" ColumnName="DescEstatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ObtenerMaterias" FunctionName="BdEscolarModel.Store.ObtenerMaterias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BdEscolarModel.ObtenerMaterias_Result">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="LimiteAlumno" ColumnName="LimiteAlumno" />
+                <ScalarProperty Name="IdMaestro" ColumnName="IdMaestro" />
+                <ScalarProperty Name="NomMaestro" ColumnName="NomMaestro" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,267 @@
+﻿@model AplicacionEmpleados.Models.AlumnosModel
+
+@{
+    ViewData["Title"] = "Alumnos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form>
+<div class="card">
+        <div class="card-header">Alta Alumnos</div>
+         <div class="card-body">
+           
+                <div class="row">
+                   
+                    <div class="col col-md-2 col-lg-2 d-flex justify-content-end">
+                        <label>Nombre</label>
+                    </div>
+
+                    <div class="col col-md-3">
+                        <input type="text" id="txtNombre"  class="form-control" />
+                    </div>
+
+                    <div class='col col-md-2 d-flex justify-content-end'>
+                        <label>Apellido Paterno</label>
+                    </div>
+
+                    <div class='col col-md-3'>
+                        <input type="text" id="txtApePat"  class='form-control' />
+                      
+                    </div>
+
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col col-md-2 d-flex justify-content-end">
+                        <label>Apellido Materno</label>
+                    </div>
+
+                    <div class="col col-sm-3">
+                        <input type="text" id="txtApeMat"  class="form-control" />
+                    </div>
+
+                    <div class="col col-md-2 d-flex justify-content-end">
+                        <label>Telefono</label>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input type="text" id="txtTelefono" class="form-control" />
+                    </div>
+                    
+                </div>
+
+
+
+                <div class="row mt-3">
+
+                     <div class="col col-md-2 d-flex justify-content-end">
+                        <label>Email </label>
+                    </div>
+
+
+                     <div class="col col-sm-3">
+                              <input type="text" id="txtEmail" class="form-control" />
+                         </div>
+
+
+
+                    <div class="col col-md-2 d-flex justify-content-end">
+                        <label>Estatus </label>
+                    </div>
+
+                    <div class="col col-sm-3">
+                        <select id="selectEstatus" class="form-control">
+                            <option disabled selected>Selecciona una opción</option>
+                            <option value="1">Activo</option>
+                            <option value="2">Inactivo</option>
+                        </select>
+                   
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col offset-md-6  d-flex justify-content-end">
+                        <a href ="#" id="btnNuevo" class="btn btn-outline-dark">Nuevo</A>&nbsp;
+                        <a href="#" class="btn btn-outline-success" id="btnGuardar">Guardar</a>&nbsp;
+                        <a href="#" class="btn btn-outline-primary" id="btnConsultar">Consultar</a>&nbsp;
+                    </div>
+                </div>
+
+                   
+               <div class="card mt-3" id="CardAlumnos" style="display:none;">
+                    <div class="card-header">Registro Alumnos</div>
+                    <div class="card-body" >
+                        <table class="table table-striped table-bordered" id="tblAlumno" style="width:100%">
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+  </form>
+
+@section Scripts {
+
+
+
+<script type="text/javascript">
+
+
+        let TablaAlumnos ={};
+        let ListaTablaAlumnos = {};
+        let AlumnoEditar = {};
+
+        $(document).ready(function () {
+
+
+        $("#btnConsultar").on("click", function () {
+          
+            TablaAlumnos.clear().draw();
+                $.ajax({
+
+                url: "@Url.Action("ConsultarAlumnos","Alumnos")",
+                dataType: "json",
+                success: function(data) {
+                    ListaTablaAlumnos = data;
+                        $.each(data, function (index, elem) {
+                         TablaAlumnos.row.add([elem.matricula, elem.nombre, elem.apePaterno, elem.apeMaterno, elem.telefono, elem.email,elem.descEstatus, '<a title="Editar" style="cursor: pointer;" data-toggle="tooltip" data-placement="bottom" title="Editar Maestro" onclick="EditarAlumno(' + elem.matricula + ')"    ><i class="fas fa-edit"></i></a>']).draw(false);
+
+            })
+
+            $("#CardAlumnos").show();
+
+                }
+        });
+
+        });
+
+
+           $("#btnNuevo").on("click", function () {
+
+                   window.location.reload(true);
+ 
+         });
+
+        $("#btnGuardar").on("click", function () {
+
+           if  (validaParametrosGuardar()){
+
+               let Alumno = {...AlumnoEditar};
+                Alumno.nombre= $("#txtNombre").val();
+                Alumno.apePaterno= $("#txtApePat").val();
+                Alumno.apeMaterno=  $("#txtApeMat").val();
+                Alumno.telefono= $("#txtTelefono").val();
+                Alumno.email = $("#txtEmail").val(),
+                Alumno.estatus= $("#selectEstatus").val();
+           
+
+              $.post('/Alumnos/GuardarAlumno', {ObjAlumno : Alumno}, function(data){
+
+                     if (data.error){
+                       swal("Error", data.msjError, "error");
+                    } else{
+
+                    
+swal({
+    title: "Exito",
+    text: "Se guardo correctamente alumno",
+    icon: "success",
+    closeOnClickOutside: false,
+    closeOnEsc: false,
+    button: "Aceptar"
+}).then(function (isConfirm) {
+     window.location.reload(true);
+});
+
+                }
+                         });
+                         }
+                       });
+
+             CrearTablaAlumnos();
+      });
+
+
+     
+            const CrearTablaAlumnos = () =>{
+
+            TablaAlumnos = $('#tblAlumno').DataTable({
+            language: {
+                url: '../css/SpanishNew.txt'
+            },
+            ordering: false,
+
+            columns: [
+                { "title": "Matricula", "width": "5%", "className": "text-center" },
+                { "title": "Nombre", "width": "25%", "className": "text-center" },
+                { "title": "Apellido Paterno", "width": "20%", "className": "text-center" },
+                { "title": "Apellido Materno", "width": "20%" },
+                { "title": "Telefono", "width": "15%", "className": "text-center" },
+                { "title": "Email", "width": "5%", "className": "text-center" },
+                { "title": "Estatus", "width": "5%", "className": "text-center" },
+                { "title": "Acción", "width": "10 % ", "className": "text-center" }
+            ]
+
+        });
+
+            }
+
+
+            const validaParametrosGuardar = () => {
+
+                let MsjAlerta = "";
+                if ($("#txtNombre").val() =="") {
+                    MsjAlerta += "Favor de ingresar el nombre";
+                }
+                if ($("#txtApePat").val() == "") {
+
+                    MsjAlerta += "\nFavor de ingresar apellido paterno";
+                }
+
+                if ($("#txtApeMat").val() == ""){
+
+                    MsjAlerta += "\nFavor de ingresar apellido materno";
+                }
+
+                if ($("#txtTelefono").val() == ""){
+                       MsjAlerta += "\nFavor de ingresar fecha nacimiento";
+                }
+
+                if($("#txtEmail").val() == ""){
+                      MsjAlerta += "\nFavor de ingresar su email";
+                }
+
+                if($("#selectEstatus").val() == null){
+                      MsjAlerta += "\nFavor de ingresar su estatus";
+                }
+ 
+
+                if (MsjAlerta != ""){
+
+                    swal("Atención", MsjAlerta, "warning");
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+
+
+            const EditarAlumno = (MatriculaAlumno) => {
+                 
+               AlumnoEditar = ListaTablaAlumnos.find( Alumno => Alumno.matricula === MatriculaAlumno  )
+                const {nombre, apePaterno, apeMaterno,telefono,email, estatus} = AlumnoEditar;
+
+                $("#txtNombre").val(nombre);
+                $("#txtApePat").val(apePaterno);
+                $("#txtApeMat").val(apeMaterno);
+                $("#txtTelefono").val(telefono);
+                $("#txtEmail").val(email);
+                $("#selectEstatus").val(estatus);
+
+                $("#CardAlumnos").hide();
+            }
+
+</script>
+
+}
