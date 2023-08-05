@@ -34,6 +34,7 @@
     ".NETCoreApp,Version=v6.0": {
       "AplicacionEscolar/1.0.0": {
         "dependencies": {
+          "MessagePackAnalyzer": "2.1.152",
           "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": "6.0.6",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.6",
           "Swashbuckle.AspNetCore": "6.3.0",

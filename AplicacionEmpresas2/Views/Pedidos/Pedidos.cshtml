@@ -1,0 +1,58 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="card">
+    <div class="card-header">Ventas/Pedidos</div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered" id="tblPedidos" style="width:100%">  </table>
+
+
+    </div>
+        </div>
+
+
+        @section Scripts {
+
+
+
+<script type="text/javascript">
+
+        let TablaPedidos;
+
+        $(document).ready(function () {
+            CrearTablaMaestros();
+        });
+       
+        const CrearTablaMaestros = () => {
+
+            TablaPedidos = $('#tblPedidos').DataTable({
+                language: {
+                    url: '../css/SpanishNew.txt'
+                },
+                ordering: false,
+
+                columns: [
+                    { "title": "Ped Cliente", "width": "10%", "className": "text-center" },
+                    { "title": "Alta Imss", "width": "10%", "className": "text-center" },
+                    { "title": "Guia", "width": "15%", "className": "text-center" },
+                    { "title": "Status", "width": "10%", "className": "text-center" },
+                    { "title": "Fecha Entrega", "width": "15 % ", "className": "text-center" },
+                    { "title": "Status Guia", "width": "15 % ", "className": "text-center" },
+                    { "title": "Factura", "width": "15 % ", "className": "text-center" },
+                    { "title": "Factura", "width": "15 % ", "className": "text-center" },
+                    { "title": "Documentos", "width": "10%", "className": "text-center" }
+                ]
+
+            });
+
+        }
+
+
+
+    </script>
+
+}

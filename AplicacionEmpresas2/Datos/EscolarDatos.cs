@@ -2,47 +2,67 @@
 using System.Data.SqlClient;
 using System.Data;
 using AplicacionEmpleados.Models;
+using AplicacionEscolar.Models;
 
 namespace AplicacionEmpresas2.Datos
 {
     public class EscolarDatos
     {
 
-        public List<MaestrosModel> ObtenerMaestros()
+
+       public List<EstatusPedidoModel> ObtenerStatus()
         {
 
-            var ListaEmpleados = new List<MaestrosModel>();
+            var ListaEstatus = new List<EstatusPedidoModel>();
             var cn = new Conexion();
 
             using (var Conexion = new SqlConnection(cn.getCadenaSQL()))
             {
+                Conexion.Open();
+
+                SqlCommand cmd = new SqlCommand("ObtenerEstatusPedido", Conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (var dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var ObjEstatus = new EstatusPedidoModel();
+
+                        ObjEstatus.Id = (int)dr["Id"];
+                        ObjEstatus.Descripcion = (string)dr["Descripcion"];
+                        ListaEstatus.Add(ObjEstatus);
+                    }
+
+                }
+            }
+            return ListaEstatus;
+
+        }
+        public EstatusPedidoModel ObtenerEstatusPedido(string OrdPedido)
+        {
+            var cn = new Conexion();
+            var ObjEstatus = new EstatusPedidoModel();
+            using (var Conexion = new SqlConnection(cn.getCadenaSQL()))
+            {
 
                 Conexion.Open();
-                SqlCommand cmd = new SqlCommand("ObtenerMaestros", Conexion);
+                SqlCommand cmd = new SqlCommand("ObtenerStatusPedido", Conexion);
+                cmd.Parameters.AddWithValue("OrdPedido", OrdPedido);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 using (var dr = cmd.ExecuteReader())
                 {
                     while (dr.Read())
                     {
-                        var ObjMaestros = new MaestrosModel();
-                        ObjMaestros.Id = (int)dr["Id"];
-                        ObjMaestros.Nombre = (string)dr["Nombre"];
-                        ObjMaestros.ApePaterno = (string)dr["ApePaterno"];
-                        ObjMaestros.ApeMaterno = (string)dr["ApeMaterno"];
-                        ObjMaestros.Telefono = (string)dr["Telefono"];
-                        ObjMaestros.Email = (string)dr["Email"];
-                        ObjMaestros.Estatus = (int)dr["Estatus"];
-                        ObjMaestros.DescEstatus = (string)dr["DescEstatus"];
+                        ObjEstatus.Id = (int)dr["Id"];
+                        ObjEstatus.Descripcion = (string)dr["Descripcion"];
 
-                        ListaEmpleados.Add(ObjMaestros);
                     }
-
 
                 }
 
             }
-            return ListaEmpleados;
+            return ObjEstatus;
         }
 
 

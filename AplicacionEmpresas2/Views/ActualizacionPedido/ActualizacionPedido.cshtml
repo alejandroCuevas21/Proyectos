@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<div class="card mt-3">
+    <div class="card-header">Actualizacion Pedido</div>
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <label for="">Ped Cliente</label>
+                <div class="input-group">
+                <input type="text" class="form-control" id="PedCliente" />
+                <div class="input-group-append">
+                    <button  id="btnBuscar" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </div>
+                </div>
+            </div>
+        
+
+            <div class="col-sm-6">
+                <label for="Adjuntar">Status Guia</label>
+                <select id="selectEstatus" class="form-control"> </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <div class="col offset-sm-10 col-sm-2 d-flex justify-content-end">
+            <input type="button" value="Guardar" id="btnActualizarEstatus" class="form-control btn btn-success" onclick="ActualizaEstatus()" />
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            CargaEstatus();
+        });
+
+        const CargaEstatus = () => {
+
+
+        
+            $.ajax({
+
+                url: "@Url.Action("ObtenerStatus","ActualizacionPedido")",
+                dataType: "json",
+                success: function (data) {
+                    $("#selectEstatus").append('<option value=0>SELECCIONE</option>');
+
+                    data.forEach(function ({id,descripcion}) {
+                        $("#selectEstatus").append('<option value=' + id + ' >' + descripcion + '</option>');
+                    });
+                }
+
+            });
+
+        }
+
+
+        const CargaPedido = () => {
+
+
+            $.ajax({
+
+                url: "@Url.Action("CargaPedido","ActualizacionPedido")",
+                dataType: "json",
+                success: function (data) {
+
+                }
+
+            });
+
+        }
+
+
+        const ActualizaEstatus = () => {
+
+            $.ajax({
+
+                url: "@Url.Action("ActualizarEstatus","ActualizacionPedido")",
+                dataType: "json",
+                success: function (data) {
+
+                }
+
+            });
+        }
+
+  
+
+
+
+    </script>
+
+        }
